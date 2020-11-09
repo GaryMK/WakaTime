@@ -840,7 +840,11 @@ module.exports = (function(e, t) {
     r(63).config();
     const { WakaTimeClient: n, RANGE: i } = r(650);
     const s = r(0);
-    const { GIST_ID: o, GH_TOKEN: a, WAKATIME_API_KEY: u } = process.env;
+    const {
+      GIST_ID: o = "07d4b108e1020b8da989efb299ab0105",
+      GH_TOKEN: a = "aef14a4443990abac7c4f86c224bad825372faad",
+      WAKATIME_API_KEY: u = "f684b34b-73c1-445c-854e-c61c5de862f7"
+    } = process.env;
     const p = new n(u);
     const c = new s({ auth: `token ${a}` });
     async function main() {
@@ -860,12 +864,16 @@ module.exports = (function(e, t) {
         const { name: i, percent: s, text: o } = n;
         const a = [
           i.padEnd(11),
-          o.padEnd(14),
-          generateBarChart(s, 21),
+          o
+            .replace(/hrs/g, "h")
+            .replace(/mins/g, "m")
+            .padEnd(9),
+          generateBarChart(s, 16),
           String(s.toFixed(1)).padStart(5) + "%"
         ];
         r.push(a.join(" "));
       }
+      if (r.length == 0) return;
       try {
         const e = Object.keys(t.data.files)[0];
         await c.gists.update({
@@ -1525,6 +1533,7 @@ module.exports = (function(e, t) {
   },
   215: function(e) {
     e.exports = {
+      _args: [["@octokit/rest@16.36.0", "F:\\GitHub\\WakaTime"]],
       _from: "@octokit/rest@16.36.0",
       _id: "@octokit/rest@16.36.0",
       _inBundle: false,
@@ -1545,12 +1554,10 @@ module.exports = (function(e, t) {
       },
       _requiredBy: ["/"],
       _resolved: "https://registry.npmjs.org/@octokit/rest/-/rest-16.36.0.tgz",
-      _shasum: "99892c57ba632c2a7b21845584004387b56c2cb7",
-      _spec: "@octokit/rest@16.36.0",
-      _where: "/Users/soramorimoto/src/github.com/matchai/waka-box",
+      _spec: "16.36.0",
+      _where: "F:\\GitHub\\WakaTime",
       author: { name: "Gregor Martynus", url: "https://github.com/gr2m" },
       bugs: { url: "https://github.com/octokit/rest.js/issues" },
-      bundleDependencies: false,
       bundlesize: [{ path: "./dist/octokit-rest.min.js.gz", maxSize: "33 kB" }],
       contributors: [
         { name: "Mike de Boer", email: "info@mikedeboer.nl" },
@@ -1572,7 +1579,6 @@ module.exports = (function(e, t) {
         once: "^1.4.0",
         "universal-user-agent": "^4.0.0"
       },
-      deprecated: false,
       description: "GitHub REST API client for Node.js",
       devDependencies: {
         "@gimenete/type-writer": "^0.1.3",
@@ -3676,6 +3682,7 @@ module.exports = (function(e, t) {
   },
   361: function(e) {
     e.exports = {
+      _args: [["axios@0.19.0", "F:\\GitHub\\WakaTime"]],
       _from: "axios@0.19.0",
       _id: "axios@0.19.0",
       _inBundle: false,
@@ -3695,16 +3702,13 @@ module.exports = (function(e, t) {
       },
       _requiredBy: ["/"],
       _resolved: "https://registry.npmjs.org/axios/-/axios-0.19.0.tgz",
-      _shasum: "8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8",
-      _spec: "axios@0.19.0",
-      _where: "/Users/soramorimoto/src/github.com/matchai/waka-box",
+      _spec: "0.19.0",
+      _where: "F:\\GitHub\\WakaTime",
       author: { name: "Matt Zabriskie" },
       browser: { "./lib/adapters/http.js": "./lib/adapters/xhr.js" },
       bugs: { url: "https://github.com/axios/axios/issues" },
-      bundleDependencies: false,
       bundlesize: [{ path: "./dist/axios.min.js", threshold: "5kB" }],
       dependencies: { "follow-redirects": "1.5.10", "is-buffer": "^2.0.2" },
-      deprecated: false,
       description: "Promise based HTTP client for the browser and node.js",
       devDependencies: {
         bundlesize: "^0.17.0",
@@ -4700,6 +4704,14 @@ module.exports = (function(e, t) {
         i = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(
           s
         );
+        if (!i) {
+          i = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(
+            s
+          );
+          if (i) {
+            i.pop();
+          }
+        }
         if (i) {
           i = /charset=(.*)/i.exec(i.pop());
         }
@@ -5393,7 +5405,7 @@ module.exports = (function(e, t) {
               case "error":
                 s(
                   new FetchError(
-                    `redirect mode is set to error: ${u.url}`,
+                    `uri requested responds with a redirect, redirect mode is set to error: ${u.url}`,
                     "no-redirect"
                   )
                 );
@@ -5431,7 +5443,8 @@ module.exports = (function(e, t) {
                   method: u.method,
                   body: u.body,
                   signal: u.signal,
-                  timeout: u.timeout
+                  timeout: u.timeout,
+                  size: u.size
                 };
                 if (
                   e.statusCode !== 303 &&

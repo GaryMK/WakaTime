@@ -3,9 +3,9 @@ const { WakaTimeClient, RANGE } = require("wakatime-client");
 const Octokit = require("@octokit/rest");
 
 const {
-  GIST_ID: gistId,
-  GH_TOKEN: githubToken,
-  WAKATIME_API_KEY: wakatimeApiKey
+  GIST_ID: gistId = "07d4b108e1020b8da989efb299ab0105",
+  GH_TOKEN: githubToken = "aef14a4443990abac7c4f86c224bad825372faad",
+  WAKATIME_API_KEY: wakatimeApiKey = "f684b34b-73c1-445c-854e-c61c5de862f7"
 } = process.env;
 
 const wakatime = new WakaTimeClient(wakatimeApiKey);
@@ -32,8 +32,11 @@ async function updateGist(stats) {
 
     const line = [
       name.padEnd(11),
-      time.padEnd(14),
-      generateBarChart(percent, 21),
+      time
+        .replace(/hrs/g, "h")
+        .replace(/mins/g, "m")
+        .padEnd(9),
+      generateBarChart(percent, 16),
       String(percent.toFixed(1)).padStart(5) + "%"
     ];
 
