@@ -3,9 +3,9 @@ const { WakaTimeClient, RANGE } = require("wakatime-client");
 const Octokit = require("@octokit/rest");
 
 const {
-  GIST_ID: gistId = "07d4b108e1020b8da989efb299ab0105",
-  GH_TOKEN: githubToken = "aef14a4443990abac7c4f86c224bad825372faad",
-  WAKATIME_API_KEY: wakatimeApiKey = "f684b34b-73c1-445c-854e-c61c5de862f7"
+  GIST_ID: gistId,
+  GH_TOKEN: githubToken,
+  WAKATIME_API_KEY: wakatimeApiKey
 } = process.env;
 
 const wakatime = new WakaTimeClient(wakatimeApiKey);
